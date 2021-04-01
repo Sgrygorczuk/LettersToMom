@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -14,9 +15,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.lettersToMom.main.lettersToMom;
+import com.mygdx.lettersToMom.objects.animatedObjects.Flower;
 import com.mygdx.lettersToMom.objects.genericObjects.Cloud;
 import com.mygdx.lettersToMom.objects.genericObjects.Platform;
 import com.mygdx.lettersToMom.objects.genericObjects.RespawnPoint;
+import com.mygdx.lettersToMom.objects.genericObjects.Water;
+import com.mygdx.lettersToMom.objects.staticObjects.Bird;
+import com.mygdx.lettersToMom.objects.staticObjects.Stamp;
 import com.mygdx.lettersToMom.objects.spriteObject.Letter;
 import com.mygdx.lettersToMom.objects.spriteObject.Person;
 import com.mygdx.lettersToMom.objects.spriteObject.UmbrellaMan;
@@ -80,6 +85,10 @@ class MainScreen extends ScreenAdapter {
     private final Array<Platform> platforms = new Array<>();
     private final Array<Person> people = new Array<>();
     private final Array<Cloud> clouds = new Array<>();
+    private final Array<Stamp> stamps = new Array<>();
+    private final Array<Flower> flowers = new Array<>();
+    private final Array<Bird> birds = new Array<>();
+    private final Array<Water> waters = new Array<>();
     private final Array<RespawnPoint> respawnPoints = new Array<>();
     private RespawnPoint currentRespawnPoint;
 
@@ -139,7 +148,32 @@ class MainScreen extends ScreenAdapter {
             platforms.add(new Platform(platformsPositions.get(i).x, platformsPositions.get(i).y, platformsDimensions.get(i).x, platformsDimensions.get(i).y));
         }
 
-        //================================= Respwan Points =======================================
+        //================================= Water =======================================
+        Array<Vector2> waterPositions = tiledSetUp.getLayerCoordinates("Water");
+        Array<Vector2> waterDimensions = tiledSetUp.getLayerDimensions("Water");
+        for(int i = 0; i < waterPositions.size; i++){
+            waters.add(new Water(waterPositions.get(i).x, waterPositions.get(i).y, waterDimensions.get(i).x, waterDimensions.get(i).y));
+        }
+
+        //================================= Stamps =======================================
+        Array<Vector2> stampPositions = tiledSetUp.getLayerCoordinates("Stamp");
+        for(int i = 0; i < stampPositions.size; i++){
+            stamps.add(new Stamp(stampPositions.get(i).x, stampPositions.get(i).y, mainScreenTextures.stampTexture));
+        }
+
+        //================================= Bird =======================================
+        Array<Vector2> birdPositions = tiledSetUp.getLayerCoordinates("Bird");
+        for(int i = 0; i < birdPositions.size; i++){
+            birds.add(new Bird(birdPositions.get(i).x, birdPositions.get(i).y, mainScreenTextures.birdTexture));
+        }
+
+        //================================= Flowers =======================================
+        Array<Vector2> flowerPositions = tiledSetUp.getLayerCoordinates("Flower");
+        for(int i = 0; i < flowerPositions.size; i++){
+            flowers.add(new Flower(flowerPositions.get(i).x, flowerPositions.get(i).y, mainScreenTextures.flowerSpriteSheet, Animation.PlayMode.LOOP));
+        }
+
+        //================================= Respawn Points =======================================
         Array<Vector2> respawnPointPositions = tiledSetUp.getLayerCoordinates("RespawnPoint");
         for(int i = 0; i < respawnPointPositions.size; i++){
             respawnPoints.add(new RespawnPoint(respawnPointPositions.get(i).x, respawnPointPositions.get(i).y));
@@ -169,8 +203,8 @@ class MainScreen extends ScreenAdapter {
                 people.add(new UmbrellaMan(position.x, position.y, mainScreenTextures.umbrellaSpriteSheet));
                 break;
             }
-            case "Grandma":{
-
+            case "Granny":{
+                people.add(new Person(position.x, position.y, mainScreenTextures.grannySpriteSheet));
                 break;
             }
             case "Painter":{
@@ -296,6 +330,8 @@ class MainScreen extends ScreenAdapter {
         letter.update(tiledSetUp.getLevelWidth(), tiledSetUp.getLevelHeight());
         for(Person person : people){ person.update(); }
         for(Cloud cloud : clouds){ cloud.update(); }
+        for(Flower flower : flowers){flower.update(delta);}
+        for(Bird bird : birds){bird.update();}
         updateCollision();
     }
 
@@ -339,6 +375,7 @@ class MainScreen extends ScreenAdapter {
         isCollidingPlatform();
         isCollidingPeople();
         isLetterColliding();
+        isStampColliding();
         isRespawnPointColliding();
     }
 
@@ -355,6 +392,9 @@ class MainScreen extends ScreenAdapter {
                 }
 
                 for(Cloud cloud : clouds){ cloud.isRainColliding(platforms.get(i).getHitBox()); }
+
+                for(Bird bird : birds){ bird.checkCollision(platforms.get(i).getHitBox()); }
+
             }
             //If there is no ground below Cole he should fall
             if (!hasGround) {
@@ -390,6 +430,19 @@ class MainScreen extends ScreenAdapter {
     /**
      * Purpose: Check if it's touching any platforms
      */
+    private void isStampColliding() {
+        if(isLetter) {
+            for (Stamp stamp : stamps) {
+                if(stamp.isColliding(letter.getHitBox())){
+                    stamps.removeValue(stamp, true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Purpose: Check if it's touching any platforms
+     */
     private void isLetterColliding() {
         if(isLetter) {
             for (Cloud cloud : clouds) {
@@ -397,6 +450,15 @@ class MainScreen extends ScreenAdapter {
                     letter.setX(currentRespawnPoint.getX());
                     letter.setY(currentRespawnPoint.getY());
                     cameraPan = true;
+                    letter.stop();
+                }
+            }
+            for (int i = 0; i < waters.size; i++) {
+                if (waters.get(i).isColliding(letter.getHitBox())) {
+                    cameraPan = true;
+                    letter.setX(currentRespawnPoint.getX());
+                    letter.setY(currentRespawnPoint.getY());
+                    camera.position.y = currentRespawnPoint.getY() + 5;
                     letter.stop();
                 }
             }
@@ -573,8 +635,11 @@ class MainScreen extends ScreenAdapter {
 
         batch.begin();
         for(Person person : people){ person.draw(batch); }
+        for(Flower flower : flowers){ flower.drawAnimations(batch); }
         if(isLetter){letter.draw(batch);}
+        for(Bird bird : birds){ bird.draw(batch); }
         for(Cloud cloud : clouds){ cloud.draw(batch); }
+        for(Stamp stamp : stamps){ stamp.draw(batch); }
         batch.end();
     }
 

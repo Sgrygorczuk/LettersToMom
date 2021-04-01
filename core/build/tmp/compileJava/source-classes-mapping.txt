@@ -38,8 +38,8 @@ com/mygdx/lettersToMom/main/lettersToMom.java
  com.mygdx.lettersToMom.main.lettersToMom
 com/mygdx/lettersToMom/tools/MusicControl.java
  com.mygdx.lettersToMom.tools.MusicControl
-com/mygdx/lettersToMom/screens/textures/MainScreenTextures.java
- com.mygdx.lettersToMom.screens.textures.MainScreenTextures
+com/mygdx/lettersToMom/objects/animatedObjects/Flower.java
+ com.mygdx.lettersToMom.objects.animatedObjects.Flower
 com/mygdx/lettersToMom/objects/staticObjects/RainDrop.java
  com.mygdx.lettersToMom.objects.staticObjects.RainDrop
 com/mygdx/lettersToMom/objects/genericObjects/GenericObjects.java
@@ -48,7 +48,15 @@ com/mygdx/lettersToMom/objects/spriteObject/Person.java
  com.mygdx.lettersToMom.objects.spriteObject.Person
 com/mygdx/lettersToMom/objects/spriteObject/UmbrellaMan.java
  com.mygdx.lettersToMom.objects.spriteObject.UmbrellaMan
+com/mygdx/lettersToMom/objects/staticObjects/Stamp.java
+ com.mygdx.lettersToMom.objects.staticObjects.Stamp
+com/mygdx/lettersToMom/objects/genericObjects/Water.java
+ com.mygdx.lettersToMom.objects.genericObjects.Water
 com/mygdx/lettersToMom/screens/LoadingScreen.java
  com.mygdx.lettersToMom.screens.LoadingScreen
+com/mygdx/lettersToMom/screens/textures/MainScreenTextures.java
+ com.mygdx.lettersToMom.screens.textures.MainScreenTextures
 com/mygdx/lettersToMom/screens/MainScreen.java
  com.mygdx.lettersToMom.screens.MainScreen
+com/mygdx/lettersToMom/objects/staticObjects/Bird.java
+ com.mygdx.lettersToMom.objects.staticObjects.Bird
