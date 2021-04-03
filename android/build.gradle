@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "29.0.3"
-    compileSdkVersion 29
+    buildToolsVersion "30.0.3"
+    compileSdkVersion 30
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -17,39 +17,19 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.mygdx.templet"
+        applicationId "com.mygdx.letterstomom"
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
-
-dependencies {
-    def room_version = "2.2.5"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
-
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"
-
-    // optional - RxJava support for Room
-    implementation "androidx.room:room-rxjava2:$room_version"
-
-    // optional - Guava support for Room, including Optional and ListenableFuture
-    implementation "androidx.room:room-guava:$room_version"
-
-    // Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
-}
-
 
 
 // called every time gradle gets executed, takes the native dependencies of
@@ -63,7 +43,7 @@ task copyAndroidNatives {
         file("libs/x86_64/").mkdirs()
         file("libs/x86/").mkdirs()
 
-        configurations.natives.files.each { jar ->
+        configurations.natives.copy().files.each { jar ->
             def outputDir = null
             if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
             if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
@@ -106,7 +86,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.templet/com.mygdx.templet.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.letterstomom/com.mygdx.letterstomom.AndroidLauncher'
 }
 
 eclipse.project.name = appName + "-android"

@@ -1,2 +1,2 @@
-com/mygdx/lettersToMom/desktop/DesktopLauncher.java
- com.mygdx.lettersToMom.desktop.DesktopLauncher
+com/mygdx/letterstomom/desktop/DesktopLauncher.java
+ com.mygdx.letterstomom.desktop.DesktopLauncher

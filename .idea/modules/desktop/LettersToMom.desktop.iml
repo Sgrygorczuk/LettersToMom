@@ -30,9 +30,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="LettersToMom.core" />
-    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-backend-lwjgl:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-platform:1.9.10:natives-desktop" level="project" />
-    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx:1.9.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-backend-lwjgl:1.9.14" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-platform:1.9.14:natives-desktop" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-box2d-platform:1.9.14:natives-desktop" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-box2d:1.9.14" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx:1.9.14" level="project" />
     <orderEntry type="library" name="Gradle: org.lwjgl.lwjgl:lwjgl_util:2.9.3" level="project" />
     <orderEntry type="library" name="Gradle: org.lwjgl.lwjgl:lwjgl:2.9.3" level="project" />
     <orderEntry type="library" name="Gradle: com.badlogicgames.jlayer:jlayer:1.0.1-gdx" level="project" />

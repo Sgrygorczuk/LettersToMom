@@ -1,64 +1,64 @@
-com/mygdx/lettersToMom/objects/spriteObject/Painting.java
- com.mygdx.lettersToMom.objects.spriteObject.Painting
-com/mygdx/lettersToMom/objects/genericObjects/Platform.java
- com.mygdx.lettersToMom.objects.genericObjects.Platform
-com/mygdx/lettersToMom/tools/TiledSetUp.java
- com.mygdx.lettersToMom.tools.TiledSetUp
-com/mygdx/lettersToMom/objects/genericObjects/Water.java
- com.mygdx.lettersToMom.objects.genericObjects.Water
-com/mygdx/lettersToMom/Const.java
- com.mygdx.lettersToMom.Const
-com/mygdx/lettersToMom/tools/DebugRendering.java
- com.mygdx.lettersToMom.tools.DebugRendering
-com/mygdx/lettersToMom/tools/CutScene.java
- com.mygdx.lettersToMom.tools.CutScene
-com/mygdx/lettersToMom/screens/textures/CreditsScreenTextures.java
- com.mygdx.lettersToMom.screens.textures.CreditsScreenTextures
-com/mygdx/lettersToMom/objects/genericObjects/Cloud.java
- com.mygdx.lettersToMom.objects.genericObjects.Cloud
-com/mygdx/lettersToMom/tools/TexturePackerTool.java
- com.mygdx.lettersToMom.tools.TexturePackerTool
-com/mygdx/lettersToMom/screens/textures/LoadingScreenTextures.java
- com.mygdx.lettersToMom.screens.textures.LoadingScreenTextures
-com/mygdx/lettersToMom/objects/spriteObject/Person.java
- com.mygdx.lettersToMom.objects.spriteObject.Person
-com/mygdx/lettersToMom/objects/staticObjects/StaticObjects.java
- com.mygdx.lettersToMom.objects.staticObjects.StaticObjects
-com/mygdx/lettersToMom/objects/spriteObject/SpriteObject.java
- com.mygdx.lettersToMom.objects.spriteObject.SpriteObject
-com/mygdx/lettersToMom/objects/spriteObject/Letter.java
- com.mygdx.lettersToMom.objects.spriteObject.Letter
-com/mygdx/lettersToMom/objects/genericObjects/TimedCloud.java
- com.mygdx.lettersToMom.objects.genericObjects.TimedCloud
-com/mygdx/lettersToMom/screens/textures/MenuScreenTextures.java
- com.mygdx.lettersToMom.screens.textures.MenuScreenTextures
-com/mygdx/lettersToMom/objects/animatedObjects/AnimatedObjects.java
- com.mygdx.lettersToMom.objects.animatedObjects.AnimatedObjects
-com/mygdx/lettersToMom/objects/genericObjects/RespawnPoint.java
- com.mygdx.lettersToMom.objects.genericObjects.RespawnPoint
-com/mygdx/lettersToMom/tools/TextAlignment.java
- com.mygdx.lettersToMom.tools.TextAlignment
-com/mygdx/lettersToMom/objects/staticObjects/Bird.java
- com.mygdx.lettersToMom.objects.staticObjects.Bird
-com/mygdx/lettersToMom/objects/staticObjects/Stamp.java
- com.mygdx.lettersToMom.objects.staticObjects.Stamp
-com/mygdx/lettersToMom/objects/animatedObjects/Flower.java
- com.mygdx.lettersToMom.objects.animatedObjects.Flower
-com/mygdx/lettersToMom/screens/textures/MainScreenTextures.java
- com.mygdx.lettersToMom.screens.textures.MainScreenTextures
-com/mygdx/lettersToMom/objects/staticObjects/RainDrop.java
- com.mygdx.lettersToMom.objects.staticObjects.RainDrop
-com/mygdx/lettersToMom/objects/genericObjects/GenericObjects.java
- com.mygdx.lettersToMom.objects.genericObjects.GenericObjects
-com/mygdx/lettersToMom/screens/LoadingScreen.java
- com.mygdx.lettersToMom.screens.LoadingScreen
-com/mygdx/lettersToMom/main/lettersToMom.java
- com.mygdx.lettersToMom.main.lettersToMom
-com/mygdx/lettersToMom/tools/MusicControl.java
- com.mygdx.lettersToMom.tools.MusicControl
-com/mygdx/lettersToMom/screens/MenuScreen.java
- com.mygdx.lettersToMom.screens.MenuScreen
-com/mygdx/lettersToMom/screens/MainScreen.java
- com.mygdx.lettersToMom.screens.MainScreen
-com/mygdx/lettersToMom/screens/CreditsScreen.java
- com.mygdx.lettersToMom.screens.CreditsScreen
+com/mygdx/letterstomom/tools/TiledSetUp.java
+ com.mygdx.letterstomom.tools.TiledSetUp
+com/mygdx/letterstomom/objects/spriteObject/Person.java
+ com.mygdx.letterstomom.objects.spriteObject.Person
+com/mygdx/letterstomom/tools/CutScene.java
+ com.mygdx.letterstomom.tools.CutScene
+com/mygdx/letterstomom/objects/genericObjects/RespawnPoint.java
+ com.mygdx.letterstomom.objects.genericObjects.RespawnPoint
+com/mygdx/letterstomom/tools/MusicControl.java
+ com.mygdx.letterstomom.tools.MusicControl
+com/mygdx/letterstomom/screens/MainScreen.java
+ com.mygdx.letterstomom.screens.MainScreen
+com/mygdx/letterstomom/objects/staticObjects/RainDrop.java
+ com.mygdx.letterstomom.objects.staticObjects.RainDrop
+com/mygdx/letterstomom/tools/TexturePackerTool.java
+ com.mygdx.letterstomom.tools.TexturePackerTool
+com/mygdx/letterstomom/objects/animatedObjects/AnimatedObjects.java
+ com.mygdx.letterstomom.objects.animatedObjects.AnimatedObjects
+com/mygdx/letterstomom/objects/animatedObjects/Flower.java
+ com.mygdx.letterstomom.objects.animatedObjects.Flower
+com/mygdx/letterstomom/objects/genericObjects/Water.java
+ com.mygdx.letterstomom.objects.genericObjects.Water
+com/mygdx/letterstomom/objects/spriteObject/Letter.java
+ com.mygdx.letterstomom.objects.spriteObject.Letter
+com/mygdx/letterstomom/objects/genericObjects/Platform.java
+ com.mygdx.letterstomom.objects.genericObjects.Platform
+com/mygdx/letterstomom/objects/staticObjects/StaticObjects.java
+ com.mygdx.letterstomom.objects.staticObjects.StaticObjects
+com/mygdx/letterstomom/main/lettersToMom.java
+ com.mygdx.letterstomom.main.lettersToMom
+com/mygdx/letterstomom/tools/DebugRendering.java
+ com.mygdx.letterstomom.tools.DebugRendering
+com/mygdx/letterstomom/screens/MenuScreen.java
+ com.mygdx.letterstomom.screens.MenuScreen
+com/mygdx/letterstomom/screens/textures/MenuScreenTextures.java
+ com.mygdx.letterstomom.screens.textures.MenuScreenTextures
+com/mygdx/letterstomom/objects/spriteObject/SpriteObject.java
+ com.mygdx.letterstomom.objects.spriteObject.SpriteObject
+com/mygdx/letterstomom/objects/staticObjects/Bird.java
+ com.mygdx.letterstomom.objects.staticObjects.Bird
+com/mygdx/letterstomom/objects/genericObjects/TimedCloud.java
+ com.mygdx.letterstomom.objects.genericObjects.TimedCloud
+com/mygdx/letterstomom/screens/LoadingScreen.java
+ com.mygdx.letterstomom.screens.LoadingScreen
+com/mygdx/letterstomom/objects/genericObjects/Cloud.java
+ com.mygdx.letterstomom.objects.genericObjects.Cloud
+com/mygdx/letterstomom/screens/textures/CreditsScreenTextures.java
+ com.mygdx.letterstomom.screens.textures.CreditsScreenTextures
+com/mygdx/letterstomom/screens/CreditsScreen.java
+ com.mygdx.letterstomom.screens.CreditsScreen
+com/mygdx/letterstomom/screens/textures/LoadingScreenTextures.java
+ com.mygdx.letterstomom.screens.textures.LoadingScreenTextures
+com/mygdx/letterstomom/screens/textures/MainScreenTextures.java
+ com.mygdx.letterstomom.screens.textures.MainScreenTextures
+com/mygdx/letterstomom/objects/spriteObject/Painting.java
+ com.mygdx.letterstomom.objects.spriteObject.Painting
+com/mygdx/letterstomom/objects/staticObjects/Stamp.java
+ com.mygdx.letterstomom.objects.staticObjects.Stamp
+com/mygdx/letterstomom/objects/genericObjects/GenericObjects.java
+ com.mygdx.letterstomom.objects.genericObjects.GenericObjects
+com/mygdx/letterstomom/Const.java
+ com.mygdx.letterstomom.Const
+com/mygdx/letterstomom/tools/TextAlignment.java
+ com.mygdx.letterstomom.tools.TextAlignment

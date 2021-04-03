@@ -27,11 +27,13 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="LettersToMom.core" />
-    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-backend-robovm:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-rt:2.3.8" level="project" />
-    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-cocoatouch:2.3.8" level="project" />
-    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-platform:1.9.10:natives-ios" level="project" />
-    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-objc:2.3.8" level="project" />
-    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx:1.9.10" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-backend-robovm:1.9.14" level="project" />
+    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-rt:2.3.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-cocoatouch:2.3.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-platform:1.9.14:natives-ios" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-box2d-platform:1.9.14:natives-ios" level="project" />
+    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-objc:2.3.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-box2d:1.9.14" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx:1.9.14" level="project" />
   </component>
 </module>
