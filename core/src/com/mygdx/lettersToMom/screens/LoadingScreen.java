@@ -140,10 +140,19 @@ public class LoadingScreen extends ScreenAdapter{
         lettersToMom.getAssetManager().load("Fonts/Font.fnt", BitmapFont.class, bitmapFontParameter);
 
         //=================== Load Music to Asset Manager ==========================================
-        lettersToMom.getAssetManager().load("Music/TestMusic.wav", Music.class);
+        lettersToMom.getAssetManager().load("Music/MenuMusic.mp3", Music.class);
+        lettersToMom.getAssetManager().load("Music/GameMusic.mp3", Music.class);
+        lettersToMom.getAssetManager().load("Music/PersonMusic.mp3", Music.class);
 
         //========================== Load SFX to Asset Manager =====================================
-        lettersToMom.getAssetManager().load("SFX/TestButton.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Water.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Wind.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Paper.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Collected.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Bird.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Pencil.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Mailbox.wav", Sound.class);
+        lettersToMom.getAssetManager().load("SFX/Footsteps.wav", Sound.class);
 
         //========================= Load Tiled Maps ================================================
         lettersToMom.getAssetManager().load("Tiled/Map.tmx", TiledMap.class);

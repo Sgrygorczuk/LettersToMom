@@ -19,12 +19,13 @@ import com.mygdx.lettersToMom.objects.animatedObjects.Flower;
 import com.mygdx.lettersToMom.objects.genericObjects.Cloud;
 import com.mygdx.lettersToMom.objects.genericObjects.Platform;
 import com.mygdx.lettersToMom.objects.genericObjects.RespawnPoint;
+import com.mygdx.lettersToMom.objects.genericObjects.TimedCloud;
 import com.mygdx.lettersToMom.objects.genericObjects.Water;
+import com.mygdx.lettersToMom.objects.spriteObject.Painting;
 import com.mygdx.lettersToMom.objects.staticObjects.Bird;
 import com.mygdx.lettersToMom.objects.staticObjects.Stamp;
 import com.mygdx.lettersToMom.objects.spriteObject.Letter;
 import com.mygdx.lettersToMom.objects.spriteObject.Person;
-import com.mygdx.lettersToMom.objects.spriteObject.UmbrellaMan;
 import com.mygdx.lettersToMom.screens.textures.MainScreenTextures;
 import com.mygdx.lettersToMom.tools.CutScene;
 import com.mygdx.lettersToMom.tools.DebugRendering;
@@ -69,9 +70,14 @@ class MainScreen extends ScreenAdapter {
     private float intilaxX = 0;
     private boolean isLetter = true;
     private int inControl = 0;     //0 - Umbrella, 1 - Grandma, 2 - Police, 3 - Painter, 4 - Mailman
+    private boolean isCloseUp = false;
+
+    private static final float WALK_TIME = 1F;
+    private float walkTime = 0;
+
+
 
     //=================================== Miscellaneous Vars =======================================
-    private final String[] menuButtonText = new String[]{"Restart", "Help", "Sound Off", "Main Menu", "Back", "Sound On"};
     private Array<String> levelNames = new Array<>(); //Names of all the lvls in order
     private int tiledSelection;                       //Which tiled map is loaded in
 
@@ -84,8 +90,15 @@ class MainScreen extends ScreenAdapter {
     //=========================== Physical Objects =====================
     private final Array<Platform> platforms = new Array<>();
     private final Array<Person> people = new Array<>();
+    private Painting painting;
+
     private final Array<Cloud> clouds = new Array<>();
+    private final Array<TimedCloud> timedClouds = new Array<>();
+
+
     private final Array<Stamp> stamps = new Array<>();
+    private int counterTotal;
+
     private final Array<Flower> flowers = new Array<>();
     private final Array<Bird> birds = new Array<>();
     private final Array<Water> waters = new Array<>();
@@ -160,6 +173,7 @@ class MainScreen extends ScreenAdapter {
         for(int i = 0; i < stampPositions.size; i++){
             stamps.add(new Stamp(stampPositions.get(i).x, stampPositions.get(i).y, mainScreenTextures.stampTexture));
         }
+        counterTotal = stamps.size;
 
         //================================= Bird =======================================
         Array<Vector2> birdPositions = tiledSetUp.getLayerCoordinates("Bird");
@@ -187,6 +201,11 @@ class MainScreen extends ScreenAdapter {
             peopleAdded(peoplePositions.get(i), peopleNames.get(i));
         }
 
+        //================================= Painting =======================================
+        Array<Vector2> paintingPositions = tiledSetUp.getLayerCoordinates("Painting");
+        painting = new Painting(paintingPositions.get(0).x, paintingPositions.get(0).y,
+                mainScreenTextures.paintingTexture);
+
         //================================= Clouds =======================================
         Array<Vector2> cloudPositions = tiledSetUp.getLayerCoordinates("Cloud");
         Array<Vector2> cloudDimensions = tiledSetUp.getLayerDimensions("Cloud");
@@ -195,24 +214,37 @@ class MainScreen extends ScreenAdapter {
                     cloudDimensions.get(i).x, cloudDimensions.get(i).y, mainScreenTextures.rainDropTexture));
         }
 
+
+        //================================= Clouds =======================================
+        Array<Vector2> timedCloudPositions = tiledSetUp.getLayerCoordinates("TimedCloud");
+        Array<Vector2> timedCloudDimensions = tiledSetUp.getLayerDimensions("TimedCloud");
+        for(int i = 0; i < timedCloudPositions.size; i++){
+            timedClouds.add(new TimedCloud(timedCloudPositions.get(i).x, timedCloudPositions.get(i).y,
+                    timedCloudDimensions.get(i).x, timedCloudDimensions.get(i).y, mainScreenTextures.rainDropTexture));
+        }
+
     }
 
     private void peopleAdded(Vector2 position, String name){
         switch (name){
             case "Umbrella":{
-                people.add(new UmbrellaMan(position.x, position.y, mainScreenTextures.umbrellaSpriteSheet));
+                people.add(new Person(position.x, position.y, mainScreenTextures.umbrellaSpriteSheet,
+                        mainScreenTextures.closeUpOneTexture, mainScreenTextures.speechBubbleOneTexture));
                 break;
             }
             case "Granny":{
-                people.add(new Person(position.x, position.y, mainScreenTextures.grannySpriteSheet));
+                people.add(new Person(position.x, position.y, mainScreenTextures.grannySpriteSheet,
+                        mainScreenTextures.closeUpTwoTexture, mainScreenTextures.speechBubbleTwoTexture));
                 break;
             }
             case "Painter":{
-
+                people.add(new Person(position.x, position.y, mainScreenTextures.painterSpriteSheet,
+                        mainScreenTextures.closeUpThreeTexture, mainScreenTextures.speechBubbleThreeTexture));
                 break;
             }
             case "Mailman":{
-
+                people.add(new Person(position.x, position.y, mainScreenTextures.mailmanSpriteSheet,
+                        mainScreenTextures.closeUpFourTexture, mainScreenTextures.speechBubbleFourTexture));
                 break;
             }
         }
@@ -238,8 +270,11 @@ class MainScreen extends ScreenAdapter {
         if(lettersToMom.getAssetManager().isLoaded("Fonts/Font.fnt")){bitmapFont = lettersToMom.getAssetManager().get("Fonts/Font.fnt");}
         bitmapFont.getData().setScale(1f);
 
-        cutSceneStart = new CutScene("UI/Background.png",
+        cutSceneStart = new CutScene(0,0, "UI/Background.png",
                 "Sprites/CutScene1.png", 7);
+
+        cutSceneEnd = new CutScene(0, 0, "UI/Background.png",
+                "Sprites/CutScene2.png", 5);
     }
 
     //=================================== Execute Time Methods =====================================
@@ -252,6 +287,9 @@ class MainScreen extends ScreenAdapter {
         //In Game Updates
         if(inCutScene){
             updateCutScenes(delta);
+        }
+        else if(isCloseUp){
+            updateCloseUp();
         }
         //Live Game Updates
         else{
@@ -290,7 +328,36 @@ class MainScreen extends ScreenAdapter {
     private void updateCutScenes(float delta){
         //End Cut Scene
         if(endFlag){
+            cutSceneEnd.updateTransition(delta);
 
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) && cutSceneEnd.getPaused()){
+                //Updates the cut Scene or takes us out of it
+                inCutScene = cutSceneEnd.nextSlide(delta);
+            }
+
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+                inCutScene = false;
+            }
+
+            if(!inCutScene){
+                lettersToMom.setScreen(new CreditsScreen(lettersToMom, stamps.size == 0));
+            }
+
+            clearScreen();
+
+            //==================== Set Up Camera =============================
+            batch.setProjectionMatrix(camera.projection);
+            batch.setTransformMatrix(camera.view);
+
+            //======================== Draws ==============================
+            batch.begin();
+            cutSceneEnd.draw(batch);
+            if(cutSceneEnd.getPaused()){
+                batch.draw(mainScreenTextures.buttonTexture, WORLD_WIDTH - mainScreenTextures.buttonTexture.getWidth() - 5 + xCameraDelta, yCameraDelta + 5);
+
+            }
+            batch.end();
         }
         //Start Cut Scene
         else{
@@ -315,8 +382,32 @@ class MainScreen extends ScreenAdapter {
             //======================== Draws ==============================
             batch.begin();
             cutSceneStart.draw(batch);
+            if(cutSceneStart.getPaused()){
+                batch.draw(mainScreenTextures.buttonTexture, WORLD_WIDTH - mainScreenTextures.buttonTexture.getWidth() - 5, 5);
+
+            }
             batch.end();
         }
+    }
+
+    private void updateCloseUp(){
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
+            isCloseUp = false;
+            musicControl.playSFX(5, 0.5f);
+        }
+
+        clearScreen();
+
+        //==================== Set Up Camera =============================
+        batch.setProjectionMatrix(camera.projection);
+        batch.setTransformMatrix(camera.view);
+
+        //======================== Draws ==============================
+        batch.begin();
+        people.get(inControl).drawCloseUp(batch, xCameraDelta, yCameraDelta);
+        batch.draw(mainScreenTextures.closeUpButtonTexture, xCameraDelta + WORLD_WIDTH - mainScreenTextures.buttonTexture.getWidth() - 5, yCameraDelta + 5);
+        batch.end();
     }
 
     /**
@@ -324,14 +415,21 @@ class MainScreen extends ScreenAdapter {
     Input: @delta - timing variable
     */
     private void update(float delta){
-        if(!cameraPan){handleInput();}
+        if(!cameraPan){handleInput(delta);}
         if(isLetter){ updateLetterCamera(); }
         else{ updatePeopleCamera(); }
         letter.update(tiledSetUp.getLevelWidth(), tiledSetUp.getLevelHeight());
         for(Person person : people){ person.update(); }
         for(Cloud cloud : clouds){ cloud.update(); }
+        for(TimedCloud timedCloud : timedClouds){ timedCloud.update(delta); }
         for(Flower flower : flowers){flower.update(delta);}
         for(Bird bird : birds){bird.update();}
+        painting.update(people.get(2).getX() + people.get(2).getWidth());
+        if(currentRespawnPoint.getX() == respawnPoints.get(respawnPoints.size - 1).getX()){
+            endFlag = true;
+            inCutScene = true;
+            cutSceneEnd.updatePosition(xCameraDelta, yCameraDelta);
+        }
         updateCollision();
     }
 
@@ -339,9 +437,14 @@ class MainScreen extends ScreenAdapter {
     /**
      * Purpose: Central Input Handling function
      */
-    private void handleInput() {
-        //Allows user to turn on dev mode
+    private void handleInput(float delta) {
         if(isLetter) {
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT) ||
+            Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+                musicControl.playSFX(0, 0.5f);
+            }
+
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 letter.move(intilaxX);
                 intilaxX -= 0.5;
@@ -362,13 +465,23 @@ class MainScreen extends ScreenAdapter {
         else{
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 people.get(inControl).move(-4);
+                walkTime -= delta;
+                if (walkTime <= 0) {
+                    walkTime = WALK_TIME;
+                    musicControl.playSFX(7, 0.1f);
+                }
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 people.get(inControl).move(4);
+                walkTime -= delta;
+                if (walkTime <= 0) {
+                    walkTime = WALK_TIME;
+                    musicControl.playSFX(7, 0.1f);
+                }
             }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { developerMode = !developerMode; }
+        //if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { developerMode = !developerMode; }
     }
 
     private void updateCollision(){
@@ -383,30 +496,18 @@ class MainScreen extends ScreenAdapter {
      * Purpose: Check if it's touching any platforms
      */
     private void isCollidingPlatform() {
-        if(isLetter) {
-            //Checks if there is ground below him
-            boolean hasGround = false;
-            for (int i = 0; i < platforms.size; i++) {
-                if (letter.updateCollision(platforms.get(i).getHitBox())) {
-                    hasGround = true;                //Tells us that he's standing
-                }
+        for (int i = 0; i < platforms.size; i++) {
+            letter.updateCollision(platforms.get(i).getHitBox());
 
-                for(Cloud cloud : clouds){ cloud.isRainColliding(platforms.get(i).getHitBox()); }
+            //if(letter.getIsHit()){musicControl.playSFX(8, 0.1f);}
 
-                for(Bird bird : birds){ bird.checkCollision(platforms.get(i).getHitBox()); }
+            for (Cloud cloud : clouds) { cloud.isRainColliding(platforms.get(i).getHitBox()); }
 
-            }
-            //If there is no ground below Cole he should fall
-            if (!hasGround) {
-                letter.setFalling(true);
-            }
-        }
-        else{
-            for (int i = 0; i < platforms.size; i++) {
-                people.get(inControl).checkCollision(platforms.get(i).getHitBox());
+            for (TimedCloud timedCloud : timedClouds) { timedCloud.isRainColliding(platforms.get(i).getHitBox()); }
 
-                for(Cloud cloud : clouds){ cloud.isRainColliding(platforms.get(i).getHitBox()); }
-            }
+            for (Bird bird : birds) { bird.checkCollision(platforms.get(i).getHitBox()); }
+
+            for (Person person : people) { person.checkCollision(platforms.get(i).getHitBox()); }
         }
 
     }
@@ -418,8 +519,10 @@ class MainScreen extends ScreenAdapter {
         for (int i = 0; i < people.size; i++) {
             if(people.get(i).isColliding(letter.getHitBox()) && people.get(i).getState() == 0){
                 isLetter = false;
+                isCloseUp = true;
                 inControl = i;
                 people.get(i).updateStateOne();
+                musicControl.playSFX(5, 0.5f);
             }
             for (Cloud cloud : clouds) {
                 cloud.isRainColliding(people.get(i).getHitBox());
@@ -435,6 +538,7 @@ class MainScreen extends ScreenAdapter {
             for (Stamp stamp : stamps) {
                 if(stamp.isColliding(letter.getHitBox())){
                     stamps.removeValue(stamp, true);
+                    musicControl.playSFX(2, 0.5f);
                 }
             }
         }
@@ -447,22 +551,41 @@ class MainScreen extends ScreenAdapter {
         if(isLetter) {
             for (Cloud cloud : clouds) {
                 if(cloud.isLetterColliding(letter.getHitBox())){
-                    letter.setX(currentRespawnPoint.getX());
-                    letter.setY(currentRespawnPoint.getY());
-                    cameraPan = true;
-                    letter.stop();
+                    respawn();
+                    musicControl.playSFX(1, 0.5f);
                 }
             }
+
+            for (TimedCloud timedCloud : timedClouds) {
+                if(timedCloud.isLetterColliding(letter.getHitBox())){
+                    respawn();
+                    musicControl.playSFX(1, 0.5f);
+                }
+            }
+
+
             for (int i = 0; i < waters.size; i++) {
                 if (waters.get(i).isColliding(letter.getHitBox())) {
-                    cameraPan = true;
-                    letter.setX(currentRespawnPoint.getX());
-                    letter.setY(currentRespawnPoint.getY());
-                    camera.position.y = currentRespawnPoint.getY() + 5;
-                    letter.stop();
+                    respawn();
+                    musicControl.playSFX(1, 0.5f);
+                }
+            }
+
+            for (int i = 0; i < birds.size; i++) {
+                if (birds.get(i).isColliding(letter.getHitBox())) {
+                    respawn();
+                    musicControl.playSFX(3, 0.5f);
                 }
             }
         }
+    }
+
+    private void respawn(){
+        cameraPan = true;
+        letter.setX(currentRespawnPoint.getX());
+        letter.setY(currentRespawnPoint.getY());
+        camera.position.y = currentRespawnPoint.getY() + 5;
+        letter.stop();
     }
 
     /**
@@ -472,13 +595,14 @@ class MainScreen extends ScreenAdapter {
         if(!isLetter) {
             for(RespawnPoint respawnPoint : respawnPoints){
                 if(respawnPoint.isColliding(people.get(inControl).getHitBox())){
-                    people.get(inControl).updateStateTwo();
+                    people.get(inControl).updateStateTwo(xCameraDelta, yCameraDelta);
                     currentRespawnPoint.setX(respawnPoint.getX());
                     currentRespawnPoint.setY(respawnPoint.getY());
                     letter.setX(respawnPoint.getX());
                     letter.setY(respawnPoint.getY());
                     isLetter = true;
                     cameraPan = true;
+                    musicControl.playSFX(6, 0.5f);
                 }
             }
         }
@@ -524,14 +648,23 @@ class MainScreen extends ScreenAdapter {
             //===================================== X ==============================================
             //If we reached the end and the Y still needs to move just stay still
             if(Math.round(letter.getX()) == Math.round(camera.position.x) ||
-                    Math.round(letter.getX()) == Math.round(camera.position.x - 1) ||
-                    Math.round(letter.getX()) == Math.round(camera.position.x + 1)){
+                    Math.round(letter.getX()) >= Math.round(camera.position.x - 2f) &&
+                    Math.round(letter.getX()) <= Math.round(camera.position.x + 2f)){
                 cameraX = camera.position.x;
             }
-            //If we're to the left of the camera move left
-            else if(letter.getX() < camera.position.x){ cameraX = camera.position.x - 3; }
-            //If we're to the right of the camera move right
-            else { cameraX = camera.position.x + 3;}
+            else if((camera.position.x - letter.getX())/100 > 5 && letter.getX() < camera.position.x){
+                //If we're to the left of the camera move left
+                cameraX = camera.position.x - (camera.position.x - letter.getX()) / 100;
+            }
+            else if(letter.getX() < camera.position.x){
+                cameraX = camera.position.x - 5;
+            }
+            else if((letter.getX() - camera.position.x)/ 100 > 5 && letter.getX() > camera.position.x){
+                cameraX = camera.position.x + (letter.getX() - camera.position.x) / 100;
+            }
+            else{
+                cameraX = camera.position.x + 5;
+            }
 
             //If we reached the boarder of the screen don't go further
             if(cameraX < WORLD_WIDTH/2f){ cameraX = WORLD_WIDTH/2f; }
@@ -600,18 +733,6 @@ class MainScreen extends ScreenAdapter {
         yCameraDelta = camera.position.y - WORLD_HEIGHT / 2f;
     }
 
-
-    /**
-    Purpose: Puts the game in end game state
-    */
-    private void endGame(){ endFlag = true; }
-
-    /**
-     Purpose: Restarts the game to it's basic settings
-     */
-    private void restart(){
-    }
-
     //========================================== Drawing ===========================================
 
     /**
@@ -634,12 +755,15 @@ class MainScreen extends ScreenAdapter {
         tiledSetUp.drawTiledMap();
 
         batch.begin();
+        painting.draw(batch);
         for(Person person : people){ person.draw(batch); }
         for(Flower flower : flowers){ flower.drawAnimations(batch); }
         if(isLetter){letter.draw(batch);}
         for(Bird bird : birds){ bird.draw(batch); }
         for(Cloud cloud : clouds){ cloud.draw(batch); }
+        for(TimedCloud timedCloud : timedClouds){ timedCloud.draw(batch); }
         for(Stamp stamp : stamps){ stamp.draw(batch); }
+        drawStamps();
         batch.end();
     }
 
@@ -654,6 +778,19 @@ class MainScreen extends ScreenAdapter {
             batch.draw(mainScreenTextures.backgroundFront, xCameraDelta - xCameraDelta * 0.3f + WORLD_WIDTH *i, yCameraDelta);
 
         }
+    }
+
+    private void drawStamps(){
+        bitmapFont.setColor(Color.BLACK);
+        bitmapFont.getData().setScale(1);
+        batch.draw(mainScreenTextures.textBackgroundTexture, xCameraDelta + 3 * mainScreenTextures.stampTexture.getWidth() - 50,
+                yCameraDelta + WORLD_HEIGHT - mainScreenTextures.textBackgroundTexture.getHeight() + 25, mainScreenTextures.textBackgroundTexture.getWidth() * 2/3f,
+                mainScreenTextures.textBackgroundTexture.getHeight()*2/3f);
+        batch.draw(mainScreenTextures.stampTexture, 5 + xCameraDelta, WORLD_HEIGHT - mainScreenTextures.stampTexture.getHeight() * 2 - 5 + yCameraDelta,
+                mainScreenTextures.stampTexture.getWidth() * 2, mainScreenTextures.stampTexture.getHeight() * 2);
+        textAlignment.centerText(batch, bitmapFont, counterTotal - stamps.size + "/" + counterTotal,
+                xCameraDelta + 40 + 3 * mainScreenTextures.stampTexture.getWidth(),
+                yCameraDelta + WORLD_HEIGHT - mainScreenTextures.stampTexture.getHeight() + 5);
     }
 
     /**

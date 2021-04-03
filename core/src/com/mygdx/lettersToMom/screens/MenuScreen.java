@@ -71,6 +71,7 @@ public class MenuScreen extends ScreenAdapter{
         menuScreenTextures = new MenuScreenTextures();
         showObjects();          //Sets up the font
         musicControl.showMusic(0);
+        musicControl.playSFX(4, 0.5f);
     }
 
     /**
@@ -93,13 +94,13 @@ public class MenuScreen extends ScreenAdapter{
         bitmapFont.getData().setScale(0.55f);
         bitmapFont.setColor(Color.BLACK);
 
-        flowerLeft = new AnimatedObjects(0, 0, menuScreenTextures.flowerSpriteSheet, Animation.PlayMode.LOOP);
+        flowerLeft = new AnimatedObjects(0, 0, menuScreenTextures.flowerSpriteSheet, 4f, Animation.PlayMode.LOOP);
         flowerLeft.setFacingRight(true);
         flowerRight = new AnimatedObjects(WORLD_WIDTH - menuScreenTextures.flowerSpriteSheet[0][0].getRegionWidth(),
-                0, menuScreenTextures.flowerSpriteSheet, Animation.PlayMode.LOOP);
+                0, menuScreenTextures.flowerSpriteSheet, 4f, Animation.PlayMode.LOOP);
 
         logo = new AnimatedObjects(WORLD_WIDTH/2f - (menuScreenTextures.logoSpriteSheet[0][0].getRegionWidth() *0.9f)/2f,
-                WORLD_HEIGHT/4f, menuScreenTextures.logoSpriteSheet, Animation.PlayMode.NORMAL);
+                WORLD_HEIGHT/4f, menuScreenTextures.logoSpriteSheet, 10f, Animation.PlayMode.NORMAL);
         logo.setHeight(menuScreenTextures.logoSpriteSheet[0][0].getRegionHeight() * 0.9f);
         logo.setWidth(menuScreenTextures.logoSpriteSheet[0][0].getRegionWidth() * 0.9f);
     }

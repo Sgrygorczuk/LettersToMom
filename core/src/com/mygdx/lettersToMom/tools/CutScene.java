@@ -15,12 +15,18 @@ public class CutScene {
     private boolean transitionPaused = true;
     private boolean switched = false;
 
+    float x;
+    float y;
+
     private TextureRegion[][] cutSceneSpiteSheet;
     private int cutSceneLength;
 
     private int place = 0;
 
-    public CutScene(String transitionPath, String cutScenePath, int cutSceneLength){
+    public CutScene(float x, float y, String transitionPath, String cutScenePath, int cutSceneLength){
+        this.x = x;
+        this.y = y;
+
         background = new Texture(Gdx.files.internal(transitionPath));
 
         Texture cutSceneTexturePath = new Texture(Gdx.files.internal(cutScenePath));
@@ -38,7 +44,14 @@ public class CutScene {
         return place + 1 < cutSceneLength;
     }
 
+    public void updatePosition(float x, float y){
+        this.x = x;
+        this.y = y;
+    }
+
     public boolean getPaused(){return transitionPaused;}
+
+    public int getPlace() { return place; }
 
     public void updateTransition(float delta){
         if(!transitionPaused){
@@ -70,9 +83,9 @@ public class CutScene {
     }
 
     public void draw(SpriteBatch batch){
-        batch.draw(cutSceneSpiteSheet[place][0], 0,0);
+        batch.draw(cutSceneSpiteSheet[place][0], x, y);
 
-        batch.draw(background, backgroundX, 0);
+        batch.draw(background, x + backgroundX, y);
     }
 
 }

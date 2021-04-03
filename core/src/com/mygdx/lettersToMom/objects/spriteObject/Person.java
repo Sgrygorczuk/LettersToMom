@@ -1,6 +1,8 @@
 package com.mygdx.lettersToMom.objects.spriteObject;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -8,12 +10,15 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Person extends SpriteObject{
 
-    private int state = 0; //0 - Inactive, 1 - Active, 2 - Talking
+    private int state = 0; //0 - Inactive, 1 - Active, 2 - Talking, 3 - Close up
     private boolean goingLeft = false;
-    Circle umbrellaHitBox;
+    private Texture speechBubble;
+    private Sprite speechBubbleSprite;
 
-    public Person(float x, float y, TextureRegion[][] spriteSheet) {
+    public Person(float x, float y, TextureRegion[][] spriteSheet, Texture closeUp, Texture speechBubble) {
         super(x, y, spriteSheet);
+        texture = closeUp;
+        this.speechBubble = speechBubble;
     }
 
     public int getState(){return state;}
@@ -30,15 +35,16 @@ public class Person extends SpriteObject{
         sprite = sprite1;
     }
 
-    public void updateStateTwo(){
+    public void updateStateTwo(float x, float y){
         this.state = 2;
         Sprite sprite1 = new Sprite(spriteSheet[0][state]);
         sprite1.setPosition(sprite.getX(), sprite.getY());
         sprite1.setRotation(0);
         sprite = sprite1;
-    }
 
-    public Circle getUmbrellaHitBox() { return umbrellaHitBox; }
+        speechBubbleSprite = new Sprite(speechBubble);
+        speechBubbleSprite.setPosition(x + sprite.getWidth(), y + sprite.getHeight() - 10);
+    }
 
     public void update(){
         if(state == 1) {
@@ -58,6 +64,16 @@ public class Person extends SpriteObject{
             hitBox.x += velocity.x;
             sprite.setX(hitBox.x);
             sprite.setRotation(rotation);
+        }
+        if(state == 2){
+            //If we reach end of rotate, rotate the other way
+            if (rotation >= 6) { goingLeft = true; }
+            else if (rotation <= -6) { goingLeft = false; }
+
+            if(goingLeft){ rotation -= 2; }
+            else{ rotation += 2; }
+
+            speechBubbleSprite.setRotation(rotation);
         }
     }
 
@@ -83,5 +99,13 @@ public class Person extends SpriteObject{
         }
     }
 
+    public void drawCloseUp(SpriteBatch batch, float x, float y){
+        batch.draw(texture, x, y);
+    }
 
+    @Override
+    public void draw(SpriteBatch batch) {
+        super.draw(batch);
+        if(state == 2){speechBubbleSprite.draw(batch);}
+    }
 }

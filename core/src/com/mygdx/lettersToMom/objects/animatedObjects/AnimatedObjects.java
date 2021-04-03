@@ -14,12 +14,13 @@ public class AnimatedObjects extends GenericObjects {
 
     boolean isFacingRight = false;
 
-    public AnimatedObjects(float x, float y, TextureRegion[][] spriteSheet, Animation.PlayMode playMode) {
+    public AnimatedObjects(float x, float y, TextureRegion[][] spriteSheet, float time, Animation.PlayMode playMode) {
         super(x, y);
         this.spriteSheet = spriteSheet;
         this.hitBox.height = spriteSheet[0][0].getRegionHeight();
         this.hitBox.width = spriteSheet[0][0].getRegionWidth();
         setUpAnimations(playMode);
+        this.animationFrameTime = time;
     }
 
     /**

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Bird extends StaticObjects{
 
+    float velocityX = 3;
     boolean isFacingRight = true;
 
     public Bird(float x, float y, Texture texture) {
@@ -17,10 +18,10 @@ public class Bird extends StaticObjects{
 
     public void update(){
         if(isFacingRight){
-            hitBox.x += 3;
+            hitBox.x += velocityX;
         }
         else{
-            hitBox.x -= 3;
+            hitBox.x -= velocityX;
         }
     }
 
@@ -33,6 +34,7 @@ public class Bird extends StaticObjects{
                     && !(this.hitBox.y >= rectangle.y + rectangle.height)
                     && this.hitBox.y >= rectangle.y) {
                 isFacingRight = !isFacingRight;
+                this.hitBox.x = rectangle.x - this.hitBox.width;
             }
             //=============== On the Right of the Colliding Platform ====================
             else if (this.hitBox.x <= rectangle.x + rectangle.width
@@ -40,7 +42,12 @@ public class Bird extends StaticObjects{
                     && !(this.hitBox.y >= rectangle.y + rectangle.height)
                     && this.hitBox.y >= rectangle.y) {
                 isFacingRight = !isFacingRight;
+                this.hitBox.x = rectangle.x + rectangle.width;
             }
+            velocityX = 0;
+        }
+        else{
+            velocityX = 3;
         }
     }
 

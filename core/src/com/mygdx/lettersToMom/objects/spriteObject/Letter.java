@@ -3,20 +3,17 @@ package com.mygdx.lettersToMom.objects.spriteObject;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.lettersToMom.tools.MusicControl;
 
 import static com.mygdx.lettersToMom.Const.FEET_HEAD_HEIGHT;
 
 public class Letter extends SpriteObject{
 
-    protected int currentHealth;
-    protected  int maxHealth;
-
     protected final Rectangle feetBox;      //Used for collisions with floors
     protected final Rectangle headBox;      //Used for collisions with ceiling's
     protected boolean isFalling = false;    //Used to tell if Cole if falling off a platform
 
-    private boolean isJumping = false;
-    private float relativeGravity = 0.1f;
+    protected boolean isHit = false;
 
     public Letter(float x, float y, Texture texture) {
         super(x, y, texture);
@@ -68,6 +65,8 @@ public class Letter extends SpriteObject{
             rotation++;
         }
 
+        if(velocity.x >= -0.2f && velocity.x <= 0.2f){ velocity.x = 0; }
+
         velocity.y -= 0.1f;
     }
 
@@ -88,19 +87,24 @@ public class Letter extends SpriteObject{
         headBox.x = hitBox.x + hitBox.width/4f;
         headBox.y = hitBox.y + hitBox.height + FEET_HEAD_HEIGHT;
 
+        if(!feetBox.overlaps(rectangle) && !headBox.overlaps(rectangle) && !hitBox.overlaps(rectangle)){
+            isHit = false;
+        }
+
         //Vertical
         //==================== Floor Collision ======================
         if(feetBox.overlaps(rectangle)){
             this.hitBox.y = rectangle.y + rectangle.height;
-            isJumping = false;  //Can jump again
             isFalling = false;  //Is no longer falling
+            if(velocity.y != 0){isHit = true;}
             velocity.y = 0;
         }
 
         //===================== Ceiling Collision =====================
         if(headBox.overlaps(rectangle)){
-            this.hitBox.y = rectangle.y - this.hitBox.height;
-            velocity.y = 0;
+            this.hitBox.y = rectangle.y - this.hitBox.height - this.headBox.height;
+            velocity.y = -1;
+            isHit = true;
         }
 
         //Horizontal
@@ -121,10 +125,14 @@ public class Letter extends SpriteObject{
                 this.hitBox.x = rectangle.x + rectangle.width;
                 velocity.x = 0; //Stop movement
             }
+            isHit = true;
         }
+
         //Tells us if the user is standing on ground (used for respawn)
         return feetBox.overlaps(rectangle);
     }
+
+    public boolean getIsHit(){return isHit;}
 
     /* ============================ Utility Functions =========================== */
 

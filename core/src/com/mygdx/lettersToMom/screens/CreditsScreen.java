@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.lettersToMom.main.lettersToMom;
 import com.mygdx.lettersToMom.screens.textures.CreditsScreenTextures;
+import com.mygdx.lettersToMom.tools.MusicControl;
 import com.mygdx.lettersToMom.tools.TextAlignment;
 
 
@@ -32,16 +33,25 @@ public class CreditsScreen extends ScreenAdapter{
     private Camera camera;
 
     //===================================== Tools ==================================================
-    private final lettersToMom template;
+    private final lettersToMom lettersToMom;
     private final TextAlignment textAlignment = new TextAlignment();
     private CreditsScreenTextures creditsScreenTextures;
+    private MusicControl musicControl;            //Plays Music
 
     //====================================== Fonts =================================================
     private BitmapFont bitmapFont = new BitmapFont();
 
     private Array<String> credits = new Array<>();
     private float position =  -TEXT_OFFSET;
+    private boolean collectedAll;
+    private boolean stampTime = false;
+    private boolean playedSound = false;
+    private boolean rewardTime = false;
 
+    //Timer counting down until we turn the draw function on/Off
+    private static final float REWARD_TIME = 10f;
+    private static final float STAMP_TIME = 2f;
+    private float stampTimer = STAMP_TIME;
 
 
 
@@ -49,8 +59,10 @@ public class CreditsScreen extends ScreenAdapter{
      * Purpose: The Constructor used when loading up the game for the first time showing off the logo
      * @param lettersToMom game object with data
      */
-    public CreditsScreen(lettersToMom lettersToMom) {
-        this.template = lettersToMom;
+    public CreditsScreen(lettersToMom lettersToMom, boolean collectedAll) {
+        System.out.println("Im in");
+        this.lettersToMom = lettersToMom;
+        this.collectedAll = collectedAll;
     }
 
     /**
@@ -72,6 +84,8 @@ public class CreditsScreen extends ScreenAdapter{
         showObjects();
         showCredits();           //Loads the stuff into the asset manager
         creditsScreenTextures = new CreditsScreenTextures();
+        musicControl = new MusicControl(lettersToMom.getAssetManager());
+        musicControl.showMusic(0);
     }
 
     /**
@@ -89,40 +103,65 @@ public class CreditsScreen extends ScreenAdapter{
      */
     private void showObjects(){
         bitmapFont.setColor(Color.BLACK);
-        if(template.getAssetManager().isLoaded("Fonts/Font.fnt")){bitmapFont = template.getAssetManager().get("Fonts/Font.fnt");}
+        if(lettersToMom.getAssetManager().isLoaded("Fonts/Font.fnt")){bitmapFont = lettersToMom.getAssetManager().get("Fonts/Font.fnt");}
         bitmapFont.getData().setScale(0.45f);
-
+        bitmapFont.setColor(Color.WHITE);
     }
 
     private void showCredits(){
-        credits.add("Title");
+        credits.add("Letters To Mom");
+        credits.add(" ");
         credits.add("Programming");
-        credits.add("P1");
-        credits.add("P1");
-        credits.add("P1");
+        credits.add("Sebastian Grygorczuk");
+        credits.add(" ");
         credits.add(" ");
         credits.add("Art");
-        credits.add("P1");
-        credits.add("P1");
+        credits.add("Sebastian Grygorczuk");
         credits.add(" ");
-        credits.add("Level Design");
-        credits.add("P1");
-        credits.add("P1");
-        credits.add("P1");
-        credits.add("P1");
+        credits.add(" ");
+        credits.add("Additional Art");
+        credits.add("Irina Grygorczuk");
+        credits.add(" ");
         credits.add(" ");
         credits.add("Music");
-        credits.add("P1");
-        credits.add("P1");
-        credits.add("P1");
+        credits.add("Yuriy Lehki");
+        credits.add(" ");
         credits.add(" ");
         credits.add("SFX");
-        credits.add("P1");
-        credits.add("P1");
-        credits.add("P1");
+        credits.add("From Freesound.org");
+        credits.add(" ");
+        credits.add("Snoman");
+        credits.add("gravel4.wav");
+        credits.add("gravel1.wav");
+        credits.add(" ");
+        credits.add("Nathan_Lomeli");
+        credits.add("mail slot shutting.wav");
+        credits.add(" ");
+        credits.add("F.M.Audio");
+        credits.add("Crumpling Piece of Paper.wav");
+        credits.add(" ");
+        credits.add("vixuxx");
+        credits.add("crow.wav");
+        credits.add(" ");
+        credits.add("nknverpacker");
+        credits.add("watersplash04.wav");
+        credits.add(" ");
+        credits.add("Fupicat");
+        credits.add("Videogame Menu Highlight");
+        credits.add(" ");
+        credits.add("BitzHawk");
+        credits.add("Draw.wav");
+        credits.add(" ");
+        credits.add("David2317");
+        credits.add("13_soplo.wav");
+        credits.add(" ");
         credits.add(" ");
         credits.add("Thank You");
-        credits.add("Game Jame");
+        credits.add("College Game Jam");
+        credits.add(" ");
+        credits.add(" ");
+        credits.add("Thank You");
+        credits.add("Mom");
 
     }
 
@@ -135,10 +174,9 @@ public class CreditsScreen extends ScreenAdapter{
     @Override
     public void render(float delta) {
         update(delta);
-        if( Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) ||
-                position - TEXT_OFFSET * credits.size > WORLD_HEIGHT){
-            template.setScreen(new LoadingScreen(template, 0));
-        }
+        //Once time is done go back to main screen
+
+
         draw();
     }
 
@@ -149,7 +187,37 @@ public class CreditsScreen extends ScreenAdapter{
      * @param delta timing variable
      */
     private void update(float delta) {
+
         position += 1;
+
+        if(position - TEXT_OFFSET * credits.size > WORLD_HEIGHT){
+            stampTime = true;
+        }
+
+        if(stampTime) {
+            if(!playedSound){
+                musicControl.playSFX(2, 0.5f);
+                playedSound = true;
+            }
+            stampTimer -= delta;
+            if (stampTimer < 0) {
+                stampTimer = REWARD_TIME;
+                if(collectedAll){
+                    rewardTime = true;
+                    stampTime = false;
+                }
+                else{
+                    lettersToMom.setScreen(new MenuScreen(lettersToMom));
+                }
+            }
+        }
+
+        if(rewardTime){
+            stampTimer -= delta;
+            if (stampTimer < 0) {
+                lettersToMom.setScreen(new MenuScreen(lettersToMom));
+            }
+        }
     }
 
 
@@ -172,8 +240,19 @@ public class CreditsScreen extends ScreenAdapter{
         for(int i = 0; i < credits.size; i++){
             textAlignment.centerText(batch, bitmapFont, credits.get(i), WORLD_WIDTH/2f, position - TEXT_OFFSET * i);
         }
-        bitmapFont.getData().setScale(0.3f);
-        textAlignment.centerText(batch, bitmapFont, "End", 240, 15 );
+        bitmapFont.getData().setScale(0.5f);
+        if(stampTime){
+            batch.draw(creditsScreenTextures.stampTexture, WORLD_WIDTH/2f - creditsScreenTextures.stampTexture.getWidth(),
+                    WORLD_HEIGHT/2f - creditsScreenTextures.stampTexture.getHeight(),
+                    creditsScreenTextures.stampTexture.getWidth()*2, creditsScreenTextures.stampTexture.getHeight()*2);
+            String collected = "Stamps in the Wind";
+            if(collectedAll){ collected = "Collected and Stamped";}
+            textAlignment.centerText(batch, bitmapFont, collected, WORLD_WIDTH/2f, WORLD_HEIGHT/2f - creditsScreenTextures.stampTexture.getHeight() * 2f);
+        }
+
+        if(rewardTime){
+            batch.draw(creditsScreenTextures.backgroundTexture, 0,0);
+        }
 
         batch.end();
     }

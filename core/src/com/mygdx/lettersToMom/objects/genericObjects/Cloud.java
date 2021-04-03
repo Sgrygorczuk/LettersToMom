@@ -10,7 +10,7 @@ import com.mygdx.lettersToMom.objects.staticObjects.RainDrop;
 
 public class Cloud extends GenericObjects{
 
-    private final Array<RainDrop> rainDrops = new Array<>();
+    protected final Array<RainDrop> rainDrops = new Array<>();
 
     Texture rainDropTexture;
 
