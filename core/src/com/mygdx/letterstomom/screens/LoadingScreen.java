@@ -205,7 +205,7 @@ public class LoadingScreen extends ScreenAdapter{
                 break;
             }
             case 1:{
-                mom.setScreen(new MainScreen(mom, 1));
+                mom.setScreen(new MainScreen(mom, 0));
                 break;
             }
             default:{
