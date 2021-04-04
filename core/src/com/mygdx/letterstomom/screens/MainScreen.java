@@ -190,8 +190,10 @@ class MainScreen extends ScreenAdapter {
 
         //================================= Respawn Points =======================================
         Array<Vector2> respawnPointPositions = tiledSetUp.getLayerCoordinates("RespawnPoint");
+        Array<Vector2> respawnPointDimensions = tiledSetUp.getLayerDimensions("RespawnPoint");
         for(int i = 0; i < respawnPointPositions.size; i++){
-            respawnPoints.add(new RespawnPoint(respawnPointPositions.get(i).x, respawnPointPositions.get(i).y));
+            respawnPoints.add(new RespawnPoint(respawnPointPositions.get(i).x, respawnPointPositions.get(i).y,
+                    respawnPointDimensions.get(i).x, respawnPointDimensions.get(i).y));
         }
         currentRespawnPoint = respawnPoints.get(0);
 
@@ -442,7 +444,8 @@ class MainScreen extends ScreenAdapter {
         if(isLetter) {
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT) ||
-            Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+            Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) ||
+                    Gdx.input.isKeyJustPressed(Input.Keys.S) || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
                 musicControl.playSFX(0, 0.5f);
             }
 
@@ -461,6 +464,11 @@ class MainScreen extends ScreenAdapter {
             }
             if (intilaxX < -7) {
                 intilaxX = -7;
+            }
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.S) || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+                intilaxX = 0;
+                letter.moveDown();
             }
         }
         else{
@@ -482,7 +490,7 @@ class MainScreen extends ScreenAdapter {
             }
         }
 
-        //if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { developerMode = !developerMode; }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { developerMode = !developerMode; }
     }
 
     private void updateCollision(){
@@ -603,6 +611,15 @@ class MainScreen extends ScreenAdapter {
                     letter.setY(respawnPoint.getY());
                     isLetter = true;
                     cameraPan = true;
+                    musicControl.playSFX(6, 0.5f);
+                }
+            }
+        }
+        else{
+            for(RespawnPoint respawnPoint : respawnPoints){
+                if(letter.isColliding(respawnPoint.getHitBox()) && currentRespawnPoint.getX() != respawnPoint.getX()){
+                    currentRespawnPoint.setX(respawnPoint.getX());
+                    currentRespawnPoint.setY(respawnPoint.getY());
                     musicControl.playSFX(6, 0.5f);
                 }
             }

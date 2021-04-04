@@ -29,16 +29,14 @@ public class Letter extends SpriteObject{
         updateVelocity(value, (value*value)/15 - value/8);
     }
 
+    public void moveDown(){
+        updateVelocity(0, -5);
+    }
+
     public void stop(){
         velocity.x = 0;
         velocity.y = 0;
     }
-
-    /**
-     * Purpose: Turns isFalling true whenever Cole doesn't have ground below him
-     */
-    public void setFalling(boolean falling){isFalling = falling;}
-    public boolean getIsFalling(){return isFalling;}
 
     /**
      * Purpose: Central Update function for Cole all continuous updates come through here

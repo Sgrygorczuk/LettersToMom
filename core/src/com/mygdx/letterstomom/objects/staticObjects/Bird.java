@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Bird extends StaticObjects{
 
-    float velocityX = 3;
+    float velocityX = 2.5f;
     boolean isFacingRight = true;
 
     public Bird(float x, float y, Texture texture) {
