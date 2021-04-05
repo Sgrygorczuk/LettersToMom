@@ -71,6 +71,7 @@ public class MenuScreen extends ScreenAdapter{
         menuScreenTextures = new MenuScreenTextures();
         showObjects();          //Sets up the font
         musicControl.showMusic(0);
+        musicControl.setMusicVolume(0.1f);
         musicControl.playSFX(4, 0.5f);
     }
 
@@ -127,6 +128,7 @@ public class MenuScreen extends ScreenAdapter{
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
             mom.setScreen(new LoadingScreen(mom, 1));
+            musicControl.stopMusic();
         }
     }
 

@@ -12,7 +12,7 @@ public class MusicControl {
 
     //================================= Variables ==================================================
     private Music music;           //What reads the music and plays it on loop
-    private float musicVolume = 1f;  //Current sfx volume
+    private float musicVolume = 0.1f;  //Current sfx volume
     private float sfxVolume = 1f;  //Current sfx volume
     AssetManager musicManager;     //All the data from the AssetManager
 
@@ -22,6 +22,7 @@ public class MusicControl {
             "Music/MenuMusic.mp3",
             "Music/GameMusic.mp3",
             "Music/PersonMusic.mp3",
+            "Music/CutSceneMusic.mp3"
     };
 
     //Holds all the names for the SFX
@@ -45,6 +46,14 @@ public class MusicControl {
      * @param songSelection selects which song is going to play for the screen
      */
     public void showMusic(int songSelection){
+        music = musicManager.get(songSelect[songSelection], Music.class);
+        music.setVolume(musicVolume);
+        music.setLooping(true);
+        music.play();
+    }
+
+    public void switchMusic(int songSelection){
+        music.stop();
         music = musicManager.get(songSelect[songSelection], Music.class);
         music.setVolume(musicVolume);
         music.setLooping(true);

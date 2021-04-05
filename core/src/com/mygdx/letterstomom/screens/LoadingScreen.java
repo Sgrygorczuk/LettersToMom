@@ -139,6 +139,7 @@ public class LoadingScreen extends ScreenAdapter{
         mom.getAssetManager().load("Music/MenuMusic.mp3", Music.class);
         mom.getAssetManager().load("Music/GameMusic.mp3", Music.class);
         mom.getAssetManager().load("Music/PersonMusic.mp3", Music.class);
+        mom.getAssetManager().load("Music/CutSceneMusic.mp3", Music.class);
 
         //========================== Load SFX to Asset Manager =====================================
         mom.getAssetManager().load("SFX/Water.wav", Sound.class);

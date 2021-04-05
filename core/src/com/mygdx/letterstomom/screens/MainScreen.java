@@ -138,7 +138,8 @@ class MainScreen extends ScreenAdapter {
         showObjects();      //Sets up player and font
         mainScreenTextures = new MainScreenTextures();
         showTiled();
-        musicControl.showMusic(0);
+        musicControl.showMusic(3);
+        musicControl.setMusicVolume(0.1f);
         if(developerMode){debugRendering.showRender();}    //If in developer mode sets up the redners
     }
 
@@ -344,6 +345,7 @@ class MainScreen extends ScreenAdapter {
             }
 
             if(!inCutScene){
+                musicControl.stopMusic();
                 mom.setScreen(new CreditsScreen(mom, stamps.size == 0));
             }
 
@@ -375,6 +377,8 @@ class MainScreen extends ScreenAdapter {
             if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
                 inCutScene = false;
             }
+
+            if(!inCutScene){ musicControl.switchMusic(1); }
 
             clearScreen();
 
@@ -490,7 +494,7 @@ class MainScreen extends ScreenAdapter {
             }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { developerMode = !developerMode; }
+        //if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) { developerMode = !developerMode; }
     }
 
     private void updateCollision(){
@@ -532,6 +536,7 @@ class MainScreen extends ScreenAdapter {
                 inControl = i;
                 people.get(i).updateStateOne();
                 musicControl.playSFX(5, 0.5f);
+                musicControl.switchMusic(2);
             }
             for (Cloud cloud : clouds) {
                 cloud.isRainColliding(people.get(i).getHitBox());
@@ -612,6 +617,12 @@ class MainScreen extends ScreenAdapter {
                     isLetter = true;
                     cameraPan = true;
                     musicControl.playSFX(6, 0.5f);
+                    if(respawnPoint.getX() != respawnPoints.get(respawnPoints.size - 1).getX()){
+                        musicControl.switchMusic(1);
+                    }
+                    else{
+                        musicControl.switchMusic(3);
+                    }
                 }
             }
         }
