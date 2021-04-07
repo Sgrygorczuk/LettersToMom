@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.letterstomom.main.lettersToMom;
 import com.mygdx.letterstomom.screens.textures.LoadingScreenTextures;
 import com.mygdx.letterstomom.tools.DebugRendering;
-import com.mygdx.letterstomom.tools.TextAlignment;
 
 import static com.mygdx.letterstomom.Const.LOGO_HEIGHT;
 import static com.mygdx.letterstomom.Const.LOGO_WIDTH;
@@ -38,8 +37,6 @@ public class LoadingScreen extends ScreenAdapter{
     //===================================== Tools ==================================================
     private final lettersToMom mom;
     private LoadingScreenTextures loadingScreenTextures;
-    private final TextAlignment textAlignment = new TextAlignment();
-    private DebugRendering debugRendering;
 
     //====================================== Fonts =================================================
     private BitmapFont bitmapFont = new BitmapFont();
@@ -52,9 +49,6 @@ public class LoadingScreen extends ScreenAdapter{
     private boolean logoDoneFlag = false;
     private static final float LOGO_TIME = 2F;
     private float logoTimer = LOGO_TIME;
-
-    //State of the progress bar
-    private float progress = 0;
 
     private Sprite sun;
     private int rotation = 0;
@@ -97,7 +91,7 @@ public class LoadingScreen extends ScreenAdapter{
         //Sets up the camera
         showCamera();           //Sets up camera through which objects are draw through
         loadingScreenTextures = new LoadingScreenTextures();
-        debugRendering = new DebugRendering(camera);
+        DebugRendering debugRendering = new DebugRendering(camera);
         debugRendering.setShapeRendererBackgroundShapeType(ShapeRenderer.ShapeType.Filled);
         showObjects();
         loadAssets();           //Loads the stuff into the asset manager
@@ -176,7 +170,7 @@ public class LoadingScreen extends ScreenAdapter{
         //If everything is loaded go to the new screen
         if (mom.getAssetManager().update() && logoDoneFlag) { goToNewScreen();}
         //Else keep loading
-        else { progress = mom.getAssetManager().getProgress();}
+        else { mom.getAssetManager().getProgress(); }
 
         updateTimer(delta);
         sun.setRotation(rotation);

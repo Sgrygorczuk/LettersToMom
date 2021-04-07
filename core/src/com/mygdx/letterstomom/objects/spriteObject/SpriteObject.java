@@ -9,13 +9,19 @@ import com.mygdx.letterstomom.objects.genericObjects.GenericObjects;
 
 public class SpriteObject extends GenericObjects {
 
-    protected Vector2 velocity;
-    protected Texture texture;
-    protected TextureRegion[][] spriteSheet;
-    protected Sprite sprite;
-    protected int rotation;
+    protected Vector2 velocity;                 //Speed of the object
+    protected Texture texture;                  //A texture
+    protected TextureRegion[][] spriteSheet;    //A sprite sheet
+    protected Sprite sprite;                    //A sprite
+    protected int rotation;                     //The rotation of the spite
 
 
+    /**
+     * Used for textured sprites, like letter, and panting
+     * @param x position
+     * @param y position
+     * @param texture texture
+     */
     public SpriteObject(float x, float y, Texture texture) {
         super(x, y);
         this.texture = texture;
@@ -24,6 +30,12 @@ public class SpriteObject extends GenericObjects {
         this.velocity = new Vector2(0,0);
     }
 
+    /**
+     * Used for people who have a sprite sheet of actions
+     * @param x position
+     * @param y positron
+     * @param spriteSheet sprite sheet
+     */
     public SpriteObject(float x, float y, TextureRegion[][] spriteSheet) {
         super(x, y);
         hitBox.width = spriteSheet[0][0].getRegionWidth();
@@ -34,12 +46,19 @@ public class SpriteObject extends GenericObjects {
         this.velocity = new Vector2(0,0);
     }
 
+    /**
+     * Updates the speed at which the sprite is moving
+     * @param x xSpeed
+     * @param y ySpeed
+     */
     protected void updateVelocity(float x, float y){
         velocity.x = x;
         velocity.y = y;
     }
 
-    public void draw(SpriteBatch batch){
-        sprite.draw(batch);
-    }
+    /**
+     * Draws the sprite
+     * @param batch where it's drawn
+     */
+    public void draw(SpriteBatch batch){ sprite.draw(batch); }
 }

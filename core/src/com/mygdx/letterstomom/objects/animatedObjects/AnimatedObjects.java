@@ -7,13 +7,20 @@ import com.mygdx.letterstomom.objects.genericObjects.GenericObjects;
 
 public class AnimatedObjects extends GenericObjects {
 
-    protected TextureRegion[][] spriteSheet;
-    protected Animation<TextureRegion> animation;
-    float animationFrameTime = 4f;
-    float animationTime = 0;
+    protected TextureRegion[][] spriteSheet;        //The sprite sheet the animation is based on
+    protected Animation<TextureRegion> animation;   //The animation
+    float animationFrameTime = 4f;                  //How long each frame lasts
+    float animationTime = 0;                        //What is the time
+    boolean isFacingRight = false;                  //Which way it the object facing
 
-    boolean isFacingRight = false;
-
+    /**
+     * Animated object has one animation and doesn't do much else
+     * @param x position
+     * @param y position
+     * @param spriteSheet sprite sheet
+     * @param time length of each frame
+     * @param playMode type of loop we want
+     */
     public AnimatedObjects(float x, float y, TextureRegion[][] spriteSheet, float time, Animation.PlayMode playMode) {
         super(x, y);
         this.spriteSheet = spriteSheet;
@@ -30,6 +37,10 @@ public class AnimatedObjects extends GenericObjects {
         animation = setUpAnimation(spriteSheet, 1/animationFrameTime, 0, playMode);
     }
 
+    /**
+     * Sets which way the animation is facing
+     * @param is facing left or right
+     */
     public void setFacingRight(boolean is) {isFacingRight = is;}
 
     /**
@@ -46,6 +57,10 @@ public class AnimatedObjects extends GenericObjects {
         return animation;
     }
 
+    /**
+     * Update the timing var
+     * @param delta timing var
+     */
     public void update(float delta) {
         animationTime += delta;
     }

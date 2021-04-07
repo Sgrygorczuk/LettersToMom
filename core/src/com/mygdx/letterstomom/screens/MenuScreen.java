@@ -16,7 +16,6 @@ import com.mygdx.letterstomom.main.lettersToMom;
 import com.mygdx.letterstomom.objects.animatedObjects.AnimatedObjects;
 import com.mygdx.letterstomom.screens.textures.MenuScreenTextures;
 import com.mygdx.letterstomom.tools.MusicControl;
-import com.mygdx.letterstomom.tools.TextAlignment;
 
 import static com.mygdx.letterstomom.Const.WORLD_HEIGHT;
 import static com.mygdx.letterstomom.Const.WORLD_WIDTH;
@@ -34,16 +33,15 @@ public class MenuScreen extends ScreenAdapter{
     private MusicControl musicControl;
     private MenuScreenTextures menuScreenTextures;
     private final lettersToMom mom;
-    private final TextAlignment textAlignment = new TextAlignment();
 
     //=========================================== Text =============================================
     //Font used for the user interaction
     private BitmapFont bitmapFont = new BitmapFont();
 
     //============================================= Misc ===========================================
-    private AnimatedObjects flowerRight;
-    private AnimatedObjects flowerLeft;
-    private AnimatedObjects logo;
+    private AnimatedObjects flowerRight;        //Flower on the right
+    private AnimatedObjects flowerLeft;         //Flower on the left
+    private AnimatedObjects logo;               //Logo of the game
 
     //================================ Set Up ======================================================
 

@@ -39,19 +39,17 @@ public class CreditsScreen extends ScreenAdapter{
     //====================================== Fonts =================================================
     private BitmapFont bitmapFont = new BitmapFont();
 
-    private Array<String> credits = new Array<>();
-    private float position =  -TEXT_OFFSET;
-    private boolean collectedAll;
-    private boolean stampTime = false;
-    private boolean playedSound = false;
-    private boolean rewardTime = false;
+    private final Array<String> credits = new Array<>();    //All of the text that will be displayed
+    private float position =  -TEXT_OFFSET;                 //Where the text will be placed
+    private final boolean collectedAll;                     //Tells us if all of the points were collected
+    private boolean stampTime = false;                      //Tells us to display the stamp
+    private boolean playedSound = false;                    //Tells us to play the stamp noise once
+    private boolean rewardTime = false;                     //Tells us to display the reward
 
     //Timer counting down until we turn the draw function on/Off
-    private static final float REWARD_TIME = 10f;
-    private static final float STAMP_TIME = 2f;
+    private static final float REWARD_TIME = 10f;           //How long the reward image should stay on
+    private static final float STAMP_TIME = 2f;             //How long the stamp should stay on
     private float stampTimer = STAMP_TIME;
-
-
 
     /**
      * Purpose: The Constructor used when loading up the game for the first time showing off the logo
@@ -106,6 +104,9 @@ public class CreditsScreen extends ScreenAdapter{
         bitmapFont.setColor(Color.WHITE);
     }
 
+    /**
+     * Set up the array that will hold all the credits text
+     */
     private void showCredits(){
         credits.add("Letters To Mom");
         credits.add(" ");
@@ -186,13 +187,15 @@ public class CreditsScreen extends ScreenAdapter{
      */
     private void update(float delta) {
 
+        //Moves text
         position += 1;
 
-        if(position - TEXT_OFFSET * credits.size > WORLD_HEIGHT){
-            stampTime = true;
-        }
+        //If text is off screen set stamp to be visible
+        if(position - TEXT_OFFSET * credits.size > WORLD_HEIGHT){ stampTime = true; }
 
+        //When stamp is visible
         if(stampTime) {
+            //Play the sound once if it hasn't been place yet
             if(!playedSound){
                 musicControl.playSFX(2, 0.5f);
                 playedSound = true;
@@ -200,16 +203,19 @@ public class CreditsScreen extends ScreenAdapter{
             stampTimer -= delta;
             if (stampTimer < 0) {
                 stampTimer = REWARD_TIME;
+                //If the player collected all rewards set to display rewards
                 if(collectedAll){
                     rewardTime = true;
                     stampTime = false;
                 }
+                //Otherwise send player back to main menu
                 else{
                     mom.setScreen(new MenuScreen(mom));
                 }
             }
         }
 
+        //Display the reward image
         if(rewardTime){
             stampTimer -= delta;
             if (stampTimer < 0) {
