@@ -24,7 +24,7 @@ Controls:
   S/Down Arrow Key - Move Down
   ESC - Skip Cut-scene
 ```
-The GitHub repsoityory only has silent tracks, the actual music is owned by [Yuriy Lehki](https://yuriylehki.weebly.com/)
+The GitHub respiratory only has silent tracks, the actual music is owned by [Yuriy Lehki](https://yuriylehki.weebly.com/)
 
 Copyright © 2021 [Sebastian Grygorczuk](https://orczuk.github.io/)
 
